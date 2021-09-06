@@ -82,7 +82,6 @@ export default {
         this.loading = false;
         this.$router.push("/");
       } catch (e) {
-        console.log(e);
         this.toast.error("Something went wrong");
         this.loading = false;
       }

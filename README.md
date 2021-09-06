@@ -1,4 +1,4 @@
-# front
+# We post front
 
 ## Project setup
 
@@ -6,7 +6,7 @@
 yarn install
 ```
 
-### After running the server run
+### After running the server run in the root of the project
 
 ```
 ./build.sh development

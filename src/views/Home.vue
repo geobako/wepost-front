@@ -3,7 +3,7 @@
     <div class="home__container">
       <va-infinite-scroll :load="loadMore">
         <div class="row " v-for="article in articles" :key="article._id">
-          <div class="flex  w-100 mb-8">
+          <div @click="onArticleClick(article)" class="flex cursor-pointer  w-100 mb-8">
             <va-card stripe class="card" stripe-color="success">
               <va-card-title>{{ article.title }}</va-card-title>
               <va-card-content>{{ article.description }}</va-card-content>
@@ -19,33 +19,58 @@
         </div>
       </va-infinite-scroll>
     </div>
+    <va-modal
+      v-model="showModal"
+      fullscreen
+      :message="selectedArticle?.description"
+      hide-default-actions
+    />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import moment from "moment";
+import axios from "axios";
+
+const apiUrl = process.env.VUE_APP_API_URL;
 export default {
   name: "Home",
 
   data() {
     return {
       value: "",
-      data: []
+      data: [],
+      selectedArticle: null,
+      showModal: false
     };
   },
-  computed: mapState({
-    articles: state => state.articles,
-    currentPage: state => state.currentPage,
-    lastPage: state => state.lastPage
-  }),
+  computed: {
+    articles() {
+      return this.$store.getters.articles;
+    },
+    currentPage() {
+      return this.$store.getters.currentPage;
+    },
+    lastPage() {
+      return this.$store.getters.lastPage;
+    }
+  },
 
   methods: {
+    async onArticleClick(article) {
+      try {
+        this.showModal = true;
+
+        this.selectedArticle = article;
+        const res = await axios.get(`${apiUrl}/article/${article._id}`);
+        this.$store.dispatch("incrementArticleViews", article);
+      } catch (e) {}
+    },
     formatDate: date => moment(date).format("DD/MM/YYYY"),
-    loadMore: () => {
-      console.log(this.currentPage, this.lastPage);
+    async loadMore() {
       if (this.currentPage < this.lastPage) {
-        this.$store.dispatch("getArticles", { page: this.currentPage + 1 });
+        return this.$store.dispatch("getArticles", { page: this.currentPage + 1 });
       }
     }
   },
@@ -59,6 +84,10 @@ export default {
 <style lang="scss">
 .w-100 {
   width: 100%;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 .home {
   width: 100%;

@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { GET_ARTICLES, LOGIN_USER, CREATE_ARTICLE } from "./types";
+import { GET_ARTICLES, LOGIN_USER, INCREMENT_VIEWS } from "./types";
 import axios from "axios";
 import { useToast } from "vue-toastification";
 
@@ -54,7 +54,6 @@ export default createStore({
       } else {
         state.articles = data.articles;
       }
-      state.articles = data.articles;
       state.currentPage = data.currentPage;
       state.lastPage = data.lastPage;
       state.loading = false;
@@ -73,14 +72,29 @@ export default createStore({
     [LOGIN_USER.ERROR]: state => {
       state.authenticated = false;
       state.loggingIn = false;
+    },
+    INCREMENT_VIEWS: (state, article) => {
+      state.articles = state.articles.map(el => {
+        if (el._id === article._id) {
+          return {
+            ...el,
+            views: el.views + 1
+          };
+        } else {
+          return el;
+        }
+      });
     }
   },
   actions: {
+    incrementArticleViews({ commit }, params) {
+      commit(INCREMENT_VIEWS, params);
+    },
     async getArticles({ commit }, params) {
       try {
         commit(GET_ARTICLES.START);
         const reqParams = params ? params : {};
-        const response = await axios.get(`${apiUrl}/article/all`, reqParams);
+        const response = await axios.get(`${apiUrl}/article/all`, { params: reqParams });
 
         commit(GET_ARTICLES.SUCCESS, response.data.data);
       } catch (error) {
