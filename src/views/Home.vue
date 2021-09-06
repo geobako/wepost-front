@@ -20,6 +20,7 @@
       </va-infinite-scroll>
     </div>
     <va-modal
+      :title="selectedArticle?.title"
       v-model="showModal"
       fullscreen
       :message="selectedArticle?.description"

@@ -17,6 +17,7 @@
         placeholder="Description"
         :min-rows="4"
         :max-rows="6"
+        messages="Required"
         autosize
       />
 
