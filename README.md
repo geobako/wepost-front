@@ -1,35 +1,21 @@
 # We post front
 
-## Project setup
+## Project setup - install dependencies
 
 ```
-yarn install
+yarn
 ```
 
-### After running the server run in the root of the project
+### After running the server locally on port 5001 run in the root of the project
 
 ```
 ./build.sh development
 ```
 
-### Compiles and hot-reloads for development
+## if you change the api port, change the buildscript as well or the .env file
+
+### Then run to start the development server
 
 ```
 yarn serve
 ```
-
-### Compiles and minifies for production
-
-```
-yarn build
-```
-
-### Lints and fixes files
-
-```
-yarn lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
