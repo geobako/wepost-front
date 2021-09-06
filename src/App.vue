@@ -1,10 +1,42 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <va-navbar>
+    <template #left>
+      <va-navbar-item>
+        <div class="btn"><router-link to="/login">Login</router-link></div></va-navbar-item
+      >
+    </template>
+    <template #center>
+      <va-navbar-item>
+        <div class="btn"><router-link to="/">WePost</router-link></div></va-navbar-item
+      >
+      <va-navbar-item v-if="authenticated">
+        <div class="btn">
+          <router-link to="/articles/create">Create</router-link>
+        </div></va-navbar-item
+      >
+    </template>
+    <template #right>
+      <va-navbar-item>
+        <va-navbar-item>
+          <div class="btn"><router-link to="/register">Register</router-link></div></va-navbar-item
+        >
+      </va-navbar-item>
+    </template>
+  </va-navbar>
+  <div class="container">
+    <router-view />
   </div>
-  <router-view/>
 </template>
+
+<script>
+import { mapState } from "vuex";
+
+export default {
+  computed: mapState({
+    authenticated: state => state.authenticated
+  })
+};
+</script>
 
 <style lang="scss">
 #app {
@@ -15,16 +47,17 @@
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
+.container {
+  padding: 3rem;
+  width: 100%;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+a {
+  color: white;
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.btn {
+  cursor: pointer;
+  margin: 0 1rem;
 }
 </style>
